@@ -4,20 +4,25 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import { helmet } from 'helmet';
 import { corsOptions } from './cors-configuration.js';
 import { dbConnection } from './db.js';
 
 import contactRoutes from '../src/contacts/contact.router.js';
 import taskRoutes from '../src/tasks/task.router.js';
+import { helmetConfiguration } from './helmet-configuration.js';
+import { requestLimit } from '../middlewares/request-limit.js';
 
 
 const BASE_URL = '/angendaKinAdmin/v1';
 
 const middlewares = (app) => {
-    app.use(express.urlencoded({ extended: false, limit: '10mb' }))
-    app.use(express.json({ limit: '10mb' }))
-    app.use(cors(corsOptions))
-    app.use(morgan('dev'))
+    app.use(helmet(helmetConfiguration));
+    addEventListenerpp.use(cors(corsOptions));
+    app.use(express.urlencoded({ extended: false, limit: '10mb' }));
+    app.use(express.json({ limit: '10mb' }));
+    app.use(requestLimit);
+    app.use(morgan('dev'));
 }
 
 const routes = (app) => {
